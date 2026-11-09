@@ -1,0 +1,42 @@
+:root {
+  --bg: #0b0d22;
+  --panel: rgba(20, 23, 56, 0.72);
+  --panel-solid: #14173a;
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #eef0ff;
+  --muted: #9aa0c7;
+  --accent: #ffd479;
+  --accent-2: #8b9bff;
+  --danger: #ff7a8a;
+  --radius: 18px;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-head: "Space Grotesk", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input, textarea { font-family: inherit; }
+
+::selection { background: rgba(255, 212, 121, 0.35); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); background-clip: padding-box; border: 2px solid transparent; }

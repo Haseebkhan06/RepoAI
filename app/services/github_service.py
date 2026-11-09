@@ -1,8 +1,22 @@
 
+import os
 import base64
 import httpx
+from dotenv import load_dotenv
+
+load_dotenv()
 
 GITHUB_API = "https://api.github.com"
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
+if not GITHUB_TOKEN:
+    raise ValueError("GITHUB_TOKEN is missing. Check your .env file.")
+
+HEADERS = {
+    "Authorization": f"Bearer {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
+}
 
 SUPPORTED_EXTENSIONS = {
     ".py", ".js", ".jsx", ".ts", ".tsx",
@@ -18,7 +32,7 @@ IGNORED_DIRS = {
 }
 
 MAX_FILES = 100
-MAX_FILE_SIZE = 100_000  # 100 KB per file
+MAX_FILE_SIZE = 100_000
 TIMEOUT = 30
 
 
@@ -26,7 +40,7 @@ async def get_repository(owner: str, repo: str):
     url = f"{GITHUB_API}/repos/{owner}/{repo}"
 
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
-        response = await client.get(url)
+        response = await client.get(url, headers=HEADERS)
 
     if response.status_code == 404:
         raise ValueError("Repository not found")
@@ -54,7 +68,7 @@ async def get_repository_files(owner: str, repo: str):
     )
 
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
-        response = await client.get(url)
+        response = await client.get(url, headers=HEADERS)
 
     if response.status_code == 409:
         return {
@@ -108,7 +122,7 @@ async def get_repository_files(owner: str, repo: str):
 
 async def get_file_content(file_url: str):
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
-        response = await client.get(file_url)
+        response = await client.get(file_url, headers=HEADERS)
 
     response.raise_for_status()
     data = response.json()
@@ -131,7 +145,10 @@ async def get_repository_contents(owner: str, repo: str):
 
     async with httpx.AsyncClient(timeout=TIMEOUT) as client:
         for file in file_data["files"]:
-            response = await client.get(file["url"])
+            response = await client.get(
+                file["url"],
+                headers=HEADERS
+            )
             response.raise_for_status()
 
             data = response.json()

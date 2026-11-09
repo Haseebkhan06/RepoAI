@@ -10,3 +10,15 @@ wheels/
 .venv
 .env
 venv/
+
+# Frontend dependencies
+node_modules/
+
+# ChromaDB vector database
+chroma_db/
+
+# Environment files
+.env.*
+!.env.example
+
+Frontend_part.mp4
